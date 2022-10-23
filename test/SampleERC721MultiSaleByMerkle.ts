@@ -1,22 +1,12 @@
-import deploy from "./deploy";
+import deploy from "./deploy"
+import createTree from "../utils/merkletree"
 
 import { Signer } from "ethers"
 import { loadFixture } from "@nomicfoundation/hardhat-network-helpers"
 import { expect } from "chai"
 import { ethers } from "hardhat"
 import { MerkleTree } from "merkletreejs"
-import { keccak256 } from "@ethersproject/keccak256"
 import { SampleERC721MultiSaleByMerkle, SampleNFT } from "../typechain-types";
-
-type Node = {
-  address: string,
-  allowedAmount: number
-}
-
-const createTree = (whiteList: Node[]) => {
-  const leaves = whiteList.map(node => ethers.utils.solidityKeccak256(['address', 'uint256'], [node.address, node.allowedAmount]))
-  return new MerkleTree(leaves, keccak256, { sortPairs: true })
-}
 
 describe("Merkletree", function () {
 
