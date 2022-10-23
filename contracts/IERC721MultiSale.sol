@@ -16,6 +16,8 @@ interface IERC721MultiSale {
 
     function setCurrentSale(Sale calldata sale) external;
 
+    function setWithdrawAddress(address payable withdrawAddress) external;
+
     function pause() external;
     
     function unpause() external;

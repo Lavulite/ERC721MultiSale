@@ -2,10 +2,14 @@
 pragma solidity >=0.8.9 <0.9.0;
 
 import "@openzeppelin/contracts/security/Pausable.sol";
+import "@openzeppelin/contracts/utils/Address.sol";
+import "./IERC721MultiSale.sol";
 import "./Sale.sol";
 import "./SalesRecord.sol";
 
-abstract contract ERC721MultiSale is Pausable {
+abstract contract ERC721MultiSale is IERC721MultiSale, Pausable {
+    using Address for address payable;
+
     // ==================================================================
     // Event
     // ==================================================================
@@ -17,6 +21,7 @@ abstract contract ERC721MultiSale is Pausable {
     Sale internal _currentSale;
     uint256 private _soldCount = 0;
     mapping(address => SalesRecord) internal _salesRecordByBuyer;
+    address payable public _withdrawAddress;
 
     // ==================================================================
     // Modifier
@@ -75,6 +80,11 @@ abstract contract ERC721MultiSale is Pausable {
             _currentSale.mintCost,
             _currentSale.maxSupply
         );
+    }
+
+    function withdraw() external {
+        require(_withdrawAddress != address(0), "withdraw address is 0 address.");
+        _withdrawAddress.sendValue(address(this).balance);
     }
 
     // ------------------------------------------------------------------

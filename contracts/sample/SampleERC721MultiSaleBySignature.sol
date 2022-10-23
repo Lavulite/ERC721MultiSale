@@ -57,6 +57,13 @@ contract SampleERC721MultiSaleBySignature is
       _unpause();
     }
 
+    function setWithdrawAddress(address payable withdrawAddress)
+        external
+        onlyRole(ADMIN)
+    {
+        _withdrawAddress = withdrawAddress;
+    }
+    
     // ==================================================================
     // operations
     // ==================================================================

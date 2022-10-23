@@ -53,18 +53,19 @@ contract SampleERC721MultiSaleByMerkle is
     // ==================================================================
     // override ERC721MultiSale
     // ==================================================================
-    function setCurrentSale(
-        Sale calldata /** sale */
-    ) external pure {
-        revert("no use.");
-    }
-
     function pause() external onlyRole(ADMIN) {
         _pause();
     }
 
     function unpause() external onlyRole(ADMIN) {
         _unpause();
+    }
+
+    function setWithdrawAddress(address payable withdrawAddress)
+        external
+        onlyRole(ADMIN)
+    {
+        _withdrawAddress = withdrawAddress;
     }
 
     // ==================================================================
