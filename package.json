@@ -1,7 +1,7 @@
 {
-  "name": "erc721-multi-sale",
-  "version": "2.1.2",
-  "description": "Project to protect NFT holders from scam.",
+  "name": "erc721-multi-sales",
+  "version": "0.0.1",
+  "description": "This project is a library to sale the ERC721.",
   "license": "MIT",
   "scripts": {
     "test": "REPORT_GAS=true npx hardhat test"
@@ -16,9 +16,8 @@
     "chai": "^4.3.6",
     "dotenv": "^16.0.3",
     "erc721a": "^4.2.3",
-    "hardhat": "^2.11.2"
-  },
-  "dependencies": {
+    "hardhat": "^2.11.2",
     "merkletreejs": "^0.2.32"
-  }
+  },
+  "dependencies": {}
 }
