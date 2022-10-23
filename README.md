@@ -18,7 +18,7 @@ ALの実現方法は下記二種類に対応しています。
 ## Usage
 
 ```shell
-npm install erc721-multi-sale
+npm install erc721-multi-sales
 ```
 
 ## Sample
