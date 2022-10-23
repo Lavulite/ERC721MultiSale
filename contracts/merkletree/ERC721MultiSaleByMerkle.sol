@@ -54,4 +54,13 @@ abstract contract ERC721MultiSaleByMerkle is
         _merkleRoot = merkleRoot;
         _setCurrentSale(sale);
     }
+
+    // ------------------------------------------------------------------
+    // unused super function
+    // ------------------------------------------------------------------
+    function setCurrentSale(
+        Sale calldata /** sale */
+    ) external pure virtual {
+        revert("no use.");
+    }
 }
