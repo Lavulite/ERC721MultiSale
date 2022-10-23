@@ -21,7 +21,7 @@ abstract contract ERC721MultiSaleBySignature is
         bytes calldata signature
     ) {
         require(
-            keccak256(abi.encodePacked(msg.sender, allowedAmount))
+            keccak256(abi.encodePacked(_currentSale.id, msg.sender, allowedAmount))
                 .toEthSignedMessageHash()
                 .recover(signature) == _signer,
             "invalid proof."

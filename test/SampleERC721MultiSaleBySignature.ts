@@ -1,27 +1,11 @@
-import deploy from "./deploy";
+import deploy from "./deploy"
+import sign from "../utils/signature"
 
 import { Signer } from "ethers"
 import { loadFixture } from "@nomicfoundation/hardhat-network-helpers"
 import { expect } from "chai"
 import { ethers } from "hardhat"
-import { SampleERC721MultiSaleBySignature, SampleNFT } from "../typechain-types";
-
-const sign = async (address: string, allowedAmount: number, signer: Signer) => {
-  return await signer.signMessage(
-    ethers.utils.arrayify(
-      ethers.utils.solidityKeccak256(
-        [
-          "address",
-          "uint256"
-        ],
-        [
-          address,
-          allowedAmount
-        ]
-      )
-    )
-  )
-}
+import { SampleERC721MultiSaleBySignature, SampleNFT } from "../typechain-types"
 
 describe("Signature", function () {
 
@@ -44,7 +28,7 @@ describe("Signature", function () {
           maxSupply: 10
         })).not.to.reverted
 
-      const signature = sign(authorized.address, 1, owner)
+      const signature = sign(1, authorized.address, 1, owner)
 
       await expect(sampleERC721MultiSaleBySignature.connect(authorized).claim(1, 1, signature, { value: ethers.utils.parseEther("0.01") }))
         .not.to.be.reverted
@@ -64,7 +48,7 @@ describe("Signature", function () {
           maxSupply: 10
         })).not.to.reverted
 
-      const signature = sign(authorized.address, 1, owner)
+      const signature = sign(1, authorized.address, 1, owner)
 
       await expect(sampleERC721MultiSaleBySignature.connect(unauthorized).claim(1, 1, signature, { value: ethers.utils.parseEther("0.01") }))
         .to.be.revertedWith("invalid proof.")
@@ -80,7 +64,7 @@ describe("Signature", function () {
         maxSupply: 10
       })).not.to.reverted
 
-    const signature = sign(await authorized.getAddress(), 1, owner)
+    const signature = sign(1, await authorized.getAddress(), 1, owner)
 
     await expect(sampleERC721MultiSaleBySignature.connect(authorized).claim(1, 1, signature, { value: ethers.utils.parseEther("0.01") }))
       .not.to.be.reverted
@@ -104,7 +88,7 @@ describe("Signature", function () {
         })).not.to.reverted
 
 
-      const signature = sign(authorized.address, 1, owner)
+      const signature = sign(2, authorized.address, 1, owner)
 
       await expect(sampleERC721MultiSaleBySignature.connect(authorized).exchange([0], 1, signature, { value: ethers.utils.parseEther("0.01") }))
         .not.to.be.reverted
@@ -127,7 +111,7 @@ describe("Signature", function () {
         })).not.to.reverted
 
 
-      const signature = sign(owner.address, 1, owner)
+      const signature = sign(2, owner.address, 1, owner)
 
       await expect(sampleERC721MultiSaleBySignature.connect(authorized).exchange([0], 1, signature, { value: ethers.utils.parseEther("0.01") }))
         .to.be.revertedWith("invalid proof.")
