@@ -61,11 +61,22 @@ contract SampleERC721MultiSaleByMerkle is
         _unpause();
     }
 
-    function setWithdrawAddress(address payable withdrawAddress)
+    function setWithdrawAddress(address payable value)
         external
         onlyRole(ADMIN)
     {
-        _withdrawAddress = withdrawAddress;
+        withdrawAddress = value;
+    }
+
+    function setMaxSupply(uint256 value)
+        external
+        onlyRole(ADMIN)
+    {
+        maxSupply = value;
+    }
+
+    function _totalSupply() internal view override returns(uint256) {
+        return _nft.totalSupply();
     }
 
     // ==================================================================

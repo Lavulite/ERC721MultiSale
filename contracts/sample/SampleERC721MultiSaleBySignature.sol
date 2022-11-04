@@ -27,7 +27,7 @@ contract SampleERC721MultiSaleBySignature is
         uint256 amount,
         uint256 allowedAmount,
         bytes calldata signature
-    ) external payable enoughEth(amount){
+    ) external payable enoughEth(amount) {
         _claim(amount, allowedAmount, signature);
         _nft.mint(msg.sender, amount);
     }
@@ -36,7 +36,7 @@ contract SampleERC721MultiSaleBySignature is
         uint256[] calldata burnTokenIds,
         uint256 allowedAmount,
         bytes calldata signature
-    ) external payable enoughEth(burnTokenIds.length){
+    ) external payable enoughEth(burnTokenIds.length) {
         _exchange(burnTokenIds, allowedAmount, signature);
         _nft.burn(msg.sender, burnTokenIds);
         _nft.mint(msg.sender, burnTokenIds.length);
@@ -50,20 +50,28 @@ contract SampleERC721MultiSaleBySignature is
     }
 
     function pause() external onlyRole(ADMIN) {
-      _pause();
+        _pause();
     }
 
-    function unpause() external onlyRole(ADMIN){
-      _unpause();
+    function unpause() external onlyRole(ADMIN) {
+        _unpause();
     }
 
-    function setWithdrawAddress(address payable withdrawAddress)
+    function setWithdrawAddress(address payable value)
         external
         onlyRole(ADMIN)
     {
-        _withdrawAddress = withdrawAddress;
+        withdrawAddress = value;
     }
-    
+
+    function setMaxSupply(uint256 value) external onlyRole(ADMIN) {
+        maxSupply = value;
+    }
+
+    function _totalSupply() internal view override returns (uint256) {
+        return _nft.totalSupply();
+    }
+
     // ==================================================================
     // operations
     // ==================================================================
@@ -83,7 +91,7 @@ contract SampleERC721MultiSaleBySignature is
         _revokeRole(role, account);
     }
 
-    function setSigner(address signer) external onlyRole(ADMIN){
+    function setSigner(address signer) external onlyRole(ADMIN) {
         _signer = signer;
     }
 }

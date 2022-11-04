@@ -40,6 +40,10 @@ contract SampleNFT is ERC721A, Ownable, AccessControl {
         return _totalBurned();
     }
 
+    function totalSupply() public view override returns(uint256) {
+        return super.totalSupply();        
+    }
+
     function supportsInterface(bytes4 interfaceId)
         public
         view

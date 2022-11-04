@@ -18,26 +18,37 @@ abstract contract ERC721MultiSale is IERC721MultiSale, Pausable {
     // ==================================================================
     // Variables
     // ==================================================================
-    Sale internal _currentSale;
     uint256 private _soldCount = 0;
+    
+    Sale internal _currentSale;
     mapping(address => SalesRecord) internal _salesRecordByBuyer;
-    address payable public _withdrawAddress;
+
+    address payable public withdrawAddress;
+    uint256 public maxSupply;
 
     // ==================================================================
     // Modifier
     // ==================================================================
+    modifier isNotOverMaxSupply(uint256 amount) {
+        require(
+            amount + _totalSupply() <= maxSupply,
+            "claim is over the max supply."
+        );
+        _;
+    }
+
     modifier isNotOverMaxSaleSupply(uint256 amount) {
         require(
             amount + _soldCount <=
                 _currentSale.maxSupply,
-            "claim is over the max supply."
+            "claim is over the max sale supply."
         );
         _;
     }
 
     modifier isNotOverAllowedAmount(uint256 amount, uint256 allowedAmount) {
         require(
-            _getBuyCount() + amount <= allowedAmount,
+            getBuyCount() + amount <= allowedAmount,
             "claim is over allowed amount."
         );
         _;
@@ -83,8 +94,18 @@ abstract contract ERC721MultiSale is IERC721MultiSale, Pausable {
     }
 
     function withdraw() external {
-        require(_withdrawAddress != address(0), "withdraw address is 0 address.");
-        _withdrawAddress.sendValue(address(this).balance);
+        require(withdrawAddress != address(0), "withdraw address is 0 address.");
+        withdrawAddress.sendValue(address(this).balance);
+    }
+
+    function getBuyCount() public view returns(uint256){
+        SalesRecord storage record = _salesRecordByBuyer[msg.sender];
+
+        if (record.id == _currentSale.id) {
+            return record.amount;
+        } else {
+            return 0;
+        }
     }
 
     // ------------------------------------------------------------------
@@ -94,6 +115,7 @@ abstract contract ERC721MultiSale is IERC721MultiSale, Pausable {
         internal
         virtual
         whenNotPaused
+        isNotOverMaxSupply(amount)
         isNotOverMaxSaleSupply(amount)
         isNotOverAllowedAmount(amount, allowedAmount)
         whenClaimSale
@@ -125,16 +147,6 @@ abstract contract ERC721MultiSale is IERC721MultiSale, Pausable {
         _soldCount += amount;
     }
 
-    function _getBuyCount() private view returns(uint256){
-        SalesRecord storage record = _salesRecordByBuyer[msg.sender];
-
-        if (record.id == _currentSale.id) {
-            return record.amount;
-        } else {
-            return 0;
-        }
-    }
-
     function _setCurrentSale(Sale calldata sale) internal virtual {
         uint8 oldId = _currentSale.id;
         _currentSale = sale;
@@ -142,4 +154,6 @@ abstract contract ERC721MultiSale is IERC721MultiSale, Pausable {
 
         emit ChangeSale(oldId, sale.id);
     }
+
+    function _totalSupply() internal virtual view returns(uint256);
 }

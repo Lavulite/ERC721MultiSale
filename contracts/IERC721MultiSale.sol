@@ -13,10 +13,14 @@ interface IERC721MultiSale {
             uint256,
             uint256
         );
+    
+    function getBuyCount() external view returns(uint256);
 
     function setCurrentSale(Sale calldata sale) external;
 
-    function setWithdrawAddress(address payable withdrawAddress) external;
+    function setWithdrawAddress(address payable value) external;
+
+    function setMaxSupply(uint256 value) external;
 
     function pause() external;
     

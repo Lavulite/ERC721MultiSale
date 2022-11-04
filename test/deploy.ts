@@ -9,10 +9,12 @@ export const deploy = async (owner: Signer) => {
   const SampleERC721MultiSaleByMerkle = await ethers.getContractFactory("SampleERC721MultiSaleByMerkle")
   const sampleERC721MultiSaleByMerkle = await SampleERC721MultiSaleByMerkle.connect(owner).deploy(sampleNFT.address)
   await sampleERC721MultiSaleByMerkle.deployed()
-
+  await sampleERC721MultiSaleByMerkle.setMaxSupply(100)
+  
   const SampleERC721MultiSaleBySignature = await ethers.getContractFactory("SampleERC721MultiSaleBySignature")
   const sampleERC721MultiSaleBySignature = await SampleERC721MultiSaleBySignature.connect(owner).deploy(sampleNFT.address)
   await sampleERC721MultiSaleBySignature.deployed()
+  await sampleERC721MultiSaleBySignature.setMaxSupply(100)
 
   await sampleERC721MultiSaleBySignature.setSigner(owner.getAddress())
 
