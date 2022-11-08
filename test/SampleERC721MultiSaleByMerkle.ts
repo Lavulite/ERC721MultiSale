@@ -1,8 +1,8 @@
 import deploy from "./deploy"
-import createTree from "../utils/merkletree"
+import { createTree } from "../utils/merkletree"
 
 import { Signer } from "ethers"
-import { impersonateAccount, loadFixture } from "@nomicfoundation/hardhat-network-helpers"
+import { loadFixture } from "@nomicfoundation/hardhat-network-helpers"
 import { expect } from "chai"
 import { ethers } from "hardhat"
 import { MerkleTree } from "merkletreejs"
@@ -339,13 +339,13 @@ describe("Merkletree", function () {
       await expect(sampleERC721MultiSaleByMerkle.connect(authorized).claim(5, 10, proof, { value: ethers.utils.parseEther("0.01") }))
         .not.to.be.reverted
 
-        await expect(sampleERC721MultiSaleByMerkle.connect(owner)["setCurrentSale((uint8,uint8,uint256,uint256),bytes32)"](
-          {
-            id: 2,
-            saleType: 0,
-            mintCost: ethers.utils.parseEther("0.001"),
-            maxSupply: 10
-          }, tree.getHexRoot())).not.to.reverted
+      await expect(sampleERC721MultiSaleByMerkle.connect(owner)["setCurrentSale((uint8,uint8,uint256,uint256),bytes32)"](
+        {
+          id: 2,
+          saleType: 0,
+          mintCost: ethers.utils.parseEther("0.001"),
+          maxSupply: 10
+        }, tree.getHexRoot())).not.to.reverted
 
       expect(await sampleERC721MultiSaleByMerkle.connect(authorized).getBuyCount()).to.equals(0)
     })

@@ -15,16 +15,22 @@ export const deploy = async (owner: Signer) => {
   const sampleERC721MultiSaleBySignature = await SampleERC721MultiSaleBySignature.connect(owner).deploy(sampleNFT.address)
   await sampleERC721MultiSaleBySignature.deployed()
   await sampleERC721MultiSaleBySignature.setMaxSupply(100)
-
   await sampleERC721MultiSaleBySignature.setSigner(owner.getAddress())
+
+  const SampleERC721MultiSaleByMerkleMultiWallet = await ethers.getContractFactory("SampleERC721MultiSaleByMerkleMultiWallet")
+  const sampleERC721MultiSaleByMerkleMultiWallet = await SampleERC721MultiSaleByMerkleMultiWallet.connect(owner).deploy(sampleNFT.address)
+  await sampleERC721MultiSaleByMerkleMultiWallet.deployed()
+  await sampleERC721MultiSaleByMerkleMultiWallet.setMaxSupply(100)
 
   await sampleNFT.grantRole(await sampleNFT.MINTER(), sampleERC721MultiSaleByMerkle.address)
   await sampleNFT.grantRole(await sampleNFT.MINTER(), sampleERC721MultiSaleBySignature.address)
+  await sampleNFT.grantRole(await sampleNFT.MINTER(), sampleERC721MultiSaleByMerkleMultiWallet.address)
 
   await sampleNFT.grantRole(await sampleNFT.BURNER(), sampleERC721MultiSaleByMerkle.address)
   await sampleNFT.grantRole(await sampleNFT.BURNER(), sampleERC721MultiSaleBySignature.address)
-
-  return { sampleNFT, sampleERC721MultiSaleByMerkle, sampleERC721MultiSaleBySignature }
+  await sampleNFT.grantRole(await sampleNFT.BURNER(), sampleERC721MultiSaleByMerkleMultiWallet.address)
+  
+  return { sampleNFT, sampleERC721MultiSaleByMerkle, sampleERC721MultiSaleBySignature, sampleERC721MultiSaleByMerkleMultiWallet }
 }
 
 export default deploy

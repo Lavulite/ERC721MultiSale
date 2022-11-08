@@ -9,9 +9,7 @@ contract SampleNFT is ERC721A, Ownable, AccessControl {
     bytes32 public MINTER = "MINTER";
     bytes32 public BURNER = "BURNER";
 
-    constructor()
-        ERC721A("SampleNFT", "SampleNFT")
-    {
+    constructor() ERC721A("SampleNFT", "SampleNFT") {
         _setRoleAdmin(MINTER, DEFAULT_ADMIN_ROLE);
         _setRoleAdmin(BURNER, DEFAULT_ADMIN_ROLE);
     }
@@ -40,8 +38,8 @@ contract SampleNFT is ERC721A, Ownable, AccessControl {
         return _totalBurned();
     }
 
-    function totalSupply() public view override returns(uint256) {
-        return super.totalSupply();        
+    function totalSupply() public view override returns (uint256) {
+        return super.totalSupply();
     }
 
     function supportsInterface(bytes4 interfaceId)
@@ -51,14 +49,24 @@ contract SampleNFT is ERC721A, Ownable, AccessControl {
         override(AccessControl, ERC721A)
         returns (bool)
     {
-        return super.supportsInterface(interfaceId);
+        return
+            ERC721A.supportsInterface(interfaceId) ||
+            AccessControl.supportsInterface(interfaceId);
     }
 
-    function grantRole(bytes32 role, address account) override public onlyOwner {
+    function grantRole(bytes32 role, address account)
+        public
+        override
+        onlyOwner
+    {
         _grantRole(role, account);
     }
 
-    function revokeRole(bytes32 role, address account) override public onlyOwner {
+    function revokeRole(bytes32 role, address account)
+        public
+        override
+        onlyOwner
+    {
         _revokeRole(role, account);
     }
 }

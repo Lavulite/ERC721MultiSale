@@ -3,11 +3,11 @@ pragma solidity >=0.8.9 <0.9.0;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "../signature/ERC721MultiSaleBySignature.sol";
-import "./SampleNFT.sol";
+import "../merkletree/ERC721MultiSaleByMerkle.sol";
+import "../../mock/SampleNFT.sol";
 
-contract SampleERC721MultiSaleBySignature is
-    ERC721MultiSaleBySignature,
+contract SampleERC721MultiSaleByMerkle is
+    ERC721MultiSaleByMerkle,
     AccessControl,
     Ownable
 {
@@ -21,40 +21,48 @@ contract SampleERC721MultiSaleBySignature is
     }
 
     // ==================================================================
-    // override ERC721MultiSaleBySignature
+    // override ERC721MultiSaleByMerkle
     // ==================================================================
     function claim(
         uint256 amount,
         uint256 allowedAmount,
-        bytes calldata signature
+        bytes32[] calldata merkleProof
     ) external payable enoughEth(amount) {
-        _claim(amount, allowedAmount, signature);
+        _claim(amount, allowedAmount, merkleProof);
         _nft.mint(msg.sender, amount);
     }
 
     function exchange(
         uint256[] calldata burnTokenIds,
         uint256 allowedAmount,
-        bytes calldata signature
+        bytes32[] calldata merkleProof
     ) external payable enoughEth(burnTokenIds.length) {
-        _exchange(burnTokenIds, allowedAmount, signature);
+        _exchange(burnTokenIds, allowedAmount, merkleProof);
         _nft.burn(msg.sender, burnTokenIds);
         _nft.mint(msg.sender, burnTokenIds.length);
+    }
+
+    function setCurrentSale(Sale calldata sale, bytes32 merkleRoot)
+        external
+        onlyRole(ADMIN)
+    {
+        _setCurrentSale(sale);
+        _merkleRoot = merkleRoot;
     }
 
     // ==================================================================
     // override ERC721MultiSale
     // ==================================================================
-    function setCurrentSale(Sale calldata sale) external onlyRole(ADMIN) {
-        _setCurrentSale(sale);
-    }
-
     function pause() external onlyRole(ADMIN) {
         _pause();
     }
 
     function unpause() external onlyRole(ADMIN) {
         _unpause();
+    }
+
+    function withdraw() external onlyRole(ADMIN) {
+        _withdraw();
     }
 
     function setWithdrawAddress(address payable value)
@@ -64,11 +72,14 @@ contract SampleERC721MultiSaleBySignature is
         withdrawAddress = value;
     }
 
-    function setMaxSupply(uint256 value) external onlyRole(ADMIN) {
+    function setMaxSupply(uint256 value)
+        external
+        onlyRole(ADMIN)
+    {
         maxSupply = value;
     }
 
-    function _totalSupply() internal view override returns (uint256) {
+    function _totalSupply() internal view override returns(uint256) {
         return _nft.totalSupply();
     }
 
@@ -89,9 +100,5 @@ contract SampleERC721MultiSaleBySignature is
         onlyOwner
     {
         _revokeRole(role, account);
-    }
-
-    function setSigner(address signer) external onlyRole(ADMIN) {
-        _signer = signer;
     }
 }

@@ -7,9 +7,18 @@ type Node = {
   allowedAmount: number
 }
 
-const createTree = (allowList: Node[]) => {
+export const createTree = (allowList: Node[]) => {
   const leaves = allowList.map(node => ethers.utils.solidityKeccak256(['address', 'uint256'], [node.address, node.allowedAmount]))
   return new MerkleTree(leaves, keccak256, { sortPairs: true })
 }
 
-export default createTree
+type MultiWalletNode = {
+  userId: number,
+  address: string,
+  allowedAmount: number
+}
+
+export const createTreeMultiWallet = (allowList: MultiWalletNode[]) => {
+  const leaves = allowList.map(node => ethers.utils.solidityKeccak256(['uint256', 'address', 'uint256'], [node.userId, node.address, node.allowedAmount]))
+  return new MerkleTree(leaves, keccak256, { sortPairs: true })
+}
