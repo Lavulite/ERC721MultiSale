@@ -16,8 +16,8 @@ abstract contract ERC721MultiSaleByMerkleMultiWallet is
     // ==================================================================
     modifier hasRight(
         uint256 userId,
-        uint256 amount,
-        uint256 allowedAmount,
+        uint248 amount,
+        uint248 allowedAmount,
         bytes32[] calldata merkleProof
     ) {
         bytes32 node = keccak256(
@@ -35,8 +35,8 @@ abstract contract ERC721MultiSaleByMerkleMultiWallet is
     // ==================================================================
     function _claim(
         uint256 userId,
-        uint256 amount,
-        uint256 allowedAmount,
+        uint248 amount,
+        uint248 allowedAmount,
         bytes32[] calldata merkleProof
     ) internal virtual hasRight(userId, amount, allowedAmount, merkleProof) {
         _claim(userId, amount, allowedAmount);
@@ -45,12 +45,12 @@ abstract contract ERC721MultiSaleByMerkleMultiWallet is
     function _exchange(
         uint256 userId,
         uint256[] calldata burnTokenIds,
-        uint256 allowedAmount,
+        uint248 allowedAmount,
         bytes32[] calldata merkleProof
     )
         internal
         virtual
-        hasRight(userId, burnTokenIds.length, allowedAmount, merkleProof)
+        hasRight(userId, uint248(burnTokenIds.length), allowedAmount, merkleProof)
     {
         _exchange(userId, burnTokenIds, allowedAmount);
     }

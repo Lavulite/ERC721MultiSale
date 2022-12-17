@@ -24,8 +24,8 @@ contract SampleERC721MultiSaleBySignature is
     // override ERC721MultiSaleBySignature
     // ==================================================================
     function claim(
-        uint256 amount,
-        uint256 allowedAmount,
+        uint248 amount,
+        uint248 allowedAmount,
         bytes calldata signature
     ) external payable enoughEth(amount) {
         _claim(amount, allowedAmount, signature);
@@ -34,7 +34,7 @@ contract SampleERC721MultiSaleBySignature is
 
     function exchange(
         uint256[] calldata burnTokenIds,
-        uint256 allowedAmount,
+        uint248 allowedAmount,
         bytes calldata signature
     ) external payable enoughEth(burnTokenIds.length) {
         _exchange(burnTokenIds, allowedAmount, signature);
@@ -57,7 +57,7 @@ contract SampleERC721MultiSaleBySignature is
         _unpause();
     }
 
-    function withdraw() external onlyRole(ADMIN) {
+    function withdraw() external payable onlyRole(ADMIN) {
         _withdraw();
     }
     

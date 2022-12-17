@@ -5,9 +5,9 @@ import "../../Sale.sol";
 
 interface IERC721MultiSaleByMerkle {
 
-  function claim(uint256 amount, uint256 allowedAmount, bytes32[] calldata merkleProof) external payable;
+  function claim(uint248 amount, uint248 allowedAmount, bytes32[] calldata merkleProof) external payable;
   
-  function exchange(uint256[] calldata burnTokenIds, uint256 allowedAmount, bytes32[] calldata merkleProof) external payable;
+  function exchange(uint256[] calldata burnTokenIds, uint248 allowedAmount, bytes32[] calldata merkleProof) external payable;
 
   function setCurrentSale(Sale calldata sale, bytes32 merkleRoot) external;
 }

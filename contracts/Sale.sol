@@ -8,7 +8,7 @@ enum SaleType {
 
 struct Sale {
     uint8 id;
+    uint248 mintCost;
+    uint248 maxSupply;
     SaleType saleType;
-    uint256 mintCost;
-    uint256 maxSupply;
 }

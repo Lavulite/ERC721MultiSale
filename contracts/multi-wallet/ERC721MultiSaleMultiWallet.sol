@@ -42,7 +42,7 @@ abstract contract ERC721MultiSaleMultiWallet is IERC721MultiSaleMultiWallet, Bas
     // ------------------------------------------------------------------
     // internal & private
     // ------------------------------------------------------------------
-    function _claim(uint256 userId, uint256 amount, uint256 allowedAmount)
+    function _claim(uint256 userId, uint248 amount, uint256 allowedAmount)
         internal
         virtual
         whenNotPaused
@@ -62,10 +62,10 @@ abstract contract ERC721MultiSaleMultiWallet is IERC721MultiSaleMultiWallet, Bas
         isNotOverAllowedAmount(userId, burnTokenIds.length, allowedAmount)
         whenExcahngeSale
     {
-        _record(userId, burnTokenIds.length);
+        _record(userId, uint248(burnTokenIds.length));
     }
 
-    function _record(uint256 userId, uint256 amount) private {
+    function _record(uint256 userId, uint248 amount) private {
         SalesRecord storage record = _salesRecordByBuyer[userId];
 
         if (record.id == _currentSale.id) {

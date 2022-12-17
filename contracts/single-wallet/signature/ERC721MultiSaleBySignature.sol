@@ -16,8 +16,8 @@ abstract contract ERC721MultiSaleBySignature is
     // Modifier
     // ==================================================================
     modifier hasRight(
-        uint256 amount,
-        uint256 allowedAmount,
+        uint248 amount,
+        uint248 allowedAmount,
         bytes calldata signature
     ) {
         require(
@@ -33,8 +33,8 @@ abstract contract ERC721MultiSaleBySignature is
     // Function
     // ==================================================================
     function _claim(
-        uint256 amount,
-        uint256 allowedAmount,
+        uint248 amount,
+        uint248 allowedAmount,
         bytes calldata signature
     ) internal virtual hasRight(amount, allowedAmount, signature) {
         _claim(amount, allowedAmount);
@@ -42,9 +42,9 @@ abstract contract ERC721MultiSaleBySignature is
 
     function _exchange(
         uint256[] calldata burnTokenIds,
-        uint256 allowedAmount,
+        uint248 allowedAmount,
         bytes calldata signature
-    ) internal virtual hasRight(burnTokenIds.length, allowedAmount, signature) {
+    ) internal virtual hasRight(uint248(burnTokenIds.length), allowedAmount, signature) {
         _exchange(burnTokenIds, allowedAmount);
     }
 }

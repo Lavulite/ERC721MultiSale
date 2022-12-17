@@ -25,8 +25,8 @@ contract SampleERC721MultiSaleByMerkleMultiWallet is
     // ==================================================================
     function claim(
         uint256 userId,
-        uint256 amount,
-        uint256 allowedAmount,
+        uint248 amount,
+        uint248 allowedAmount,
         bytes32[] calldata merkleProof
     ) external payable enoughEth(amount) {
         _claim(userId, amount, allowedAmount, merkleProof);
@@ -36,7 +36,7 @@ contract SampleERC721MultiSaleByMerkleMultiWallet is
     function exchange(
         uint256 userId,
         uint256[] calldata burnTokenIds,
-        uint256 allowedAmount,
+        uint248 allowedAmount,
         bytes32[] calldata merkleProof
     ) external payable enoughEth(burnTokenIds.length) {
         _exchange(userId, burnTokenIds, allowedAmount, merkleProof);
@@ -63,7 +63,7 @@ contract SampleERC721MultiSaleByMerkleMultiWallet is
         _unpause();
     }
 
-    function withdraw() external onlyRole(ADMIN) {
+    function withdraw() external payable onlyRole(ADMIN) {
         _withdraw();
     }
 

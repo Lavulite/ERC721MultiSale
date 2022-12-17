@@ -23,7 +23,7 @@ describe("Merkletree", function () {
       const { sampleNFT, sampleERC721MultiSaleByMerkle, owner, authorized, unauthorized, others } = await loadFixture(deployFixture)
 
       const tree = createTree([{ address: authorized.address, allowedAmount: 1 }])
-      await expect(sampleERC721MultiSaleByMerkle.connect(owner)["setCurrentSale((uint8,uint8,uint256,uint256),bytes32)"](
+      await expect(sampleERC721MultiSaleByMerkle.connect(owner)["setCurrentSale((uint8,uint248,uint248,uint8),bytes32)"](
         {
           id: 1,
           saleType: 0,
@@ -31,7 +31,7 @@ describe("Merkletree", function () {
           maxSupply: 10
         }, tree.getHexRoot())).not.to.reverted
 
-      const proof = tree.getHexProof(ethers.utils.solidityKeccak256(['address', 'uint256'], [authorized.address, 1]))
+      const proof = tree.getHexProof(ethers.utils.solidityKeccak256(['address', 'uint248'], [authorized.address, 1]))
 
       await expect(sampleERC721MultiSaleByMerkle.connect(authorized).claim(1, 1, proof, { value: ethers.utils.parseEther("0.01") }))
         .not.to.be.reverted
@@ -43,7 +43,7 @@ describe("Merkletree", function () {
       const { sampleNFT, sampleERC721MultiSaleByMerkle, owner, authorized, unauthorized, others } = await loadFixture(deployFixture)
 
       const tree = createTree([{ address: authorized.address, allowedAmount: 1 }])
-      await expect(sampleERC721MultiSaleByMerkle.connect(owner)["setCurrentSale((uint8,uint8,uint256,uint256),bytes32)"](
+      await expect(sampleERC721MultiSaleByMerkle.connect(owner)["setCurrentSale((uint8,uint248,uint248,uint8),bytes32)"](
         {
           id: 1,
           saleType: 0,
@@ -51,7 +51,7 @@ describe("Merkletree", function () {
           maxSupply: 10
         }, tree.getHexRoot())).not.to.reverted
 
-      const proof = tree.getHexProof(ethers.utils.solidityKeccak256(['address', 'uint256'], [unauthorized.address, 1]))
+      const proof = tree.getHexProof(ethers.utils.solidityKeccak256(['address', 'uint248'], [unauthorized.address, 1]))
 
       await expect(sampleERC721MultiSaleByMerkle.connect(unauthorized).claim(1, 1, proof, { value: ethers.utils.parseEther("0.01") }))
         .to.be.revertedWith("invalid proof.")
@@ -61,7 +61,7 @@ describe("Merkletree", function () {
       const { sampleNFT, sampleERC721MultiSaleByMerkle, owner, authorized, unauthorized, others } = await loadFixture(deployFixture)
 
       const tree = createTree([{ address: authorized.address, allowedAmount: 1 }])
-      await expect(sampleERC721MultiSaleByMerkle.connect(owner)["setCurrentSale((uint8,uint8,uint256,uint256),bytes32)"](
+      await expect(sampleERC721MultiSaleByMerkle.connect(owner)["setCurrentSale((uint8,uint248,uint248,uint8),bytes32)"](
         {
           id: 1,
           saleType: 0,
@@ -69,7 +69,7 @@ describe("Merkletree", function () {
           maxSupply: 10
         }, tree.getHexRoot())).not.to.reverted
 
-      const proof = tree.getHexProof(ethers.utils.solidityKeccak256(['address', 'uint256'], [authorized.address, 1]))
+      const proof = tree.getHexProof(ethers.utils.solidityKeccak256(['address', 'uint248'], [authorized.address, 1]))
 
       await expect(sampleERC721MultiSaleByMerkle.connect(authorized).claim(1, 1, proof, { value: ethers.utils.parseEther("0.0009") }))
         .to.be.revertedWith("not enough eth.")
@@ -79,7 +79,7 @@ describe("Merkletree", function () {
       const { sampleNFT, sampleERC721MultiSaleByMerkle, owner, authorized, unauthorized, others } = await loadFixture(deployFixture)
 
       const tree = createTree([{ address: authorized.address, allowedAmount: 1 }])
-      await expect(sampleERC721MultiSaleByMerkle.connect(owner)["setCurrentSale((uint8,uint8,uint256,uint256),bytes32)"](
+      await expect(sampleERC721MultiSaleByMerkle.connect(owner)["setCurrentSale((uint8,uint248,uint248,uint8),bytes32)"](
         {
           id: 1,
           saleType: 0,
@@ -87,7 +87,7 @@ describe("Merkletree", function () {
           maxSupply: 10
         }, tree.getHexRoot())).not.to.reverted
 
-      const proof = tree.getHexProof(ethers.utils.solidityKeccak256(['address', 'uint256'], [authorized.address, 1]))
+      const proof = tree.getHexProof(ethers.utils.solidityKeccak256(['address', 'uint248'], [authorized.address, 1]))
 
       await expect(sampleERC721MultiSaleByMerkle.connect(authorized).claim(1, 1, proof, { value: ethers.utils.parseEther("0.001") }))
         .not.to.be.reverted
@@ -99,7 +99,7 @@ describe("Merkletree", function () {
       const { sampleNFT, sampleERC721MultiSaleByMerkle, owner, authorized, unauthorized, others } = await loadFixture(deployFixture)
 
       const tree = createTree(others.map(account => { return { address: account.address, allowedAmount: 5 } }))
-      await expect(sampleERC721MultiSaleByMerkle.connect(owner)["setCurrentSale((uint8,uint8,uint256,uint256),bytes32)"](
+      await expect(sampleERC721MultiSaleByMerkle.connect(owner)["setCurrentSale((uint8,uint248,uint248,uint8),bytes32)"](
         {
           id: 1,
           saleType: 0,
@@ -108,12 +108,12 @@ describe("Merkletree", function () {
         }, tree.getHexRoot())).not.to.reverted
 
       for (const i of [0, 1]) {
-        const proof = tree.getHexProof(ethers.utils.solidityKeccak256(['address', 'uint256'], [others[i].address, 5]))
+        const proof = tree.getHexProof(ethers.utils.solidityKeccak256(['address', 'uint248'], [others[i].address, 5]))
         await expect(sampleERC721MultiSaleByMerkle.connect(others[i]).claim(5, 5, proof, { value: ethers.utils.parseEther("0.005") }))
           .not.to.be.reverted
       }
 
-      const proof = tree.getHexProof(ethers.utils.solidityKeccak256(['address', 'uint256'], [others[2].address, 5]))
+      const proof = tree.getHexProof(ethers.utils.solidityKeccak256(['address', 'uint248'], [others[2].address, 5]))
       await expect(sampleERC721MultiSaleByMerkle.connect(others[2]).claim(1, 5, proof, { value: ethers.utils.parseEther("0.001") }))
         .to.be.revertedWith("claim is over the max sale supply.")
     })
@@ -123,7 +123,7 @@ describe("Merkletree", function () {
       const { sampleNFT, sampleERC721MultiSaleByMerkle, owner, authorized, unauthorized, others } = await loadFixture(deployFixture)
 
       const tree = createTree(others.map(account => { return { address: account.address, allowedAmount: 30 } }))
-      await expect(sampleERC721MultiSaleByMerkle.connect(owner)["setCurrentSale((uint8,uint8,uint256,uint256),bytes32)"](
+      await expect(sampleERC721MultiSaleByMerkle.connect(owner)["setCurrentSale((uint8,uint248,uint248,uint8),bytes32)"](
         {
           id: 1,
           saleType: 0,
@@ -132,12 +132,12 @@ describe("Merkletree", function () {
         }, tree.getHexRoot())).not.to.reverted
 
       for (const i of [0, 1, 2]) {
-        const proof = tree.getHexProof(ethers.utils.solidityKeccak256(['address', 'uint256'], [others[i].address, 30]))
+        const proof = tree.getHexProof(ethers.utils.solidityKeccak256(['address', 'uint248'], [others[i].address, 30]))
         await expect(sampleERC721MultiSaleByMerkle.connect(others[i]).claim(30, 30, proof, { value: ethers.utils.parseEther("0.03") }))
           .not.to.be.reverted
       }
 
-      const proof = tree.getHexProof(ethers.utils.solidityKeccak256(['address', 'uint256'], [others[3].address, 30]))
+      const proof = tree.getHexProof(ethers.utils.solidityKeccak256(['address', 'uint248'], [others[3].address, 30]))
       await expect(sampleERC721MultiSaleByMerkle.connect(others[3]).claim(11, 30, proof, { value: ethers.utils.parseEther("0.011") }))
         .to.be.revertedWith("claim is over the max supply.")
     })
@@ -145,7 +145,7 @@ describe("Merkletree", function () {
 
 
   const claim = async (tree: MerkleTree, sampleERC721MultiSaleByMerkle: SampleERC721MultiSaleByMerkle, owner: Signer, authorized: Signer, sampleNFT: SampleNFT) => {
-    await expect(sampleERC721MultiSaleByMerkle.connect(owner)["setCurrentSale((uint8,uint8,uint256,uint256),bytes32)"](
+    await expect(sampleERC721MultiSaleByMerkle.connect(owner)["setCurrentSale((uint8,uint248,uint248,uint8),bytes32)"](
       {
         id: 1,
         saleType: 0,
@@ -153,7 +153,7 @@ describe("Merkletree", function () {
         maxSupply: 10
       }, tree.getHexRoot())).not.to.reverted
 
-    const proof = tree.getHexProof(ethers.utils.solidityKeccak256(['address', 'uint256'], [await authorized.getAddress(), 1]))
+    const proof = tree.getHexProof(ethers.utils.solidityKeccak256(['address', 'uint248'], [await authorized.getAddress(), 1]))
 
     await expect(sampleERC721MultiSaleByMerkle.connect(authorized).claim(1, 1, proof, { value: ethers.utils.parseEther("0.01") }))
       .not.to.be.reverted
@@ -168,7 +168,7 @@ describe("Merkletree", function () {
 
       await claim(tree, sampleERC721MultiSaleByMerkle, owner, authorized, sampleNFT);
 
-      await expect(sampleERC721MultiSaleByMerkle.connect(owner)["setCurrentSale((uint8,uint8,uint256,uint256),bytes32)"](
+      await expect(sampleERC721MultiSaleByMerkle.connect(owner)["setCurrentSale((uint8,uint248,uint248,uint8),bytes32)"](
         {
           id: 2,
           saleType: 1,
@@ -177,7 +177,7 @@ describe("Merkletree", function () {
         }, tree.getHexRoot())).not.to.reverted
 
 
-      const proof = tree.getHexProof(ethers.utils.solidityKeccak256(['address', 'uint256'], [authorized.address, 1]))
+      const proof = tree.getHexProof(ethers.utils.solidityKeccak256(['address', 'uint248'], [authorized.address, 1]))
 
       await expect(sampleERC721MultiSaleByMerkle.connect(authorized).exchange([0], 1, proof, { value: ethers.utils.parseEther("0.01") }))
         .not.to.be.reverted
@@ -195,7 +195,7 @@ describe("Merkletree", function () {
 
       const tree2 = createTree([{ address: owner.address, allowedAmount: 1 }])
 
-      await expect(sampleERC721MultiSaleByMerkle.connect(owner)["setCurrentSale((uint8,uint8,uint256,uint256),bytes32)"](
+      await expect(sampleERC721MultiSaleByMerkle.connect(owner)["setCurrentSale((uint8,uint248,uint248,uint8),bytes32)"](
         {
           id: 2,
           saleType: 1,
@@ -204,7 +204,7 @@ describe("Merkletree", function () {
         }, tree2.getHexRoot())).not.to.reverted
 
 
-      const proof = tree2.getHexProof(ethers.utils.solidityKeccak256(['address', 'uint256'], [authorized.address, 1]))
+      const proof = tree2.getHexProof(ethers.utils.solidityKeccak256(['address', 'uint248'], [authorized.address, 1]))
 
       await expect(sampleERC721MultiSaleByMerkle.connect(authorized).exchange([0], 1, proof, { value: ethers.utils.parseEther("0.01") }))
         .to.be.revertedWith("invalid proof.")
@@ -217,7 +217,7 @@ describe("Merkletree", function () {
 
       await claim(tree, sampleERC721MultiSaleByMerkle, owner, authorized, sampleNFT);
 
-      await expect(sampleERC721MultiSaleByMerkle.connect(owner)["setCurrentSale((uint8,uint8,uint256,uint256),bytes32)"](
+      await expect(sampleERC721MultiSaleByMerkle.connect(owner)["setCurrentSale((uint8,uint248,uint248,uint8),bytes32)"](
         {
           id: 2,
           saleType: 1,
@@ -225,7 +225,7 @@ describe("Merkletree", function () {
           maxSupply: 10
         }, tree.getHexRoot())).not.to.reverted
 
-      const proof = tree.getHexProof(ethers.utils.solidityKeccak256(['address', 'uint256'], [authorized.address, 1]))
+      const proof = tree.getHexProof(ethers.utils.solidityKeccak256(['address', 'uint248'], [authorized.address, 1]))
 
       await expect(sampleERC721MultiSaleByMerkle.connect(authorized).exchange([0], 1, proof, { value: ethers.utils.parseEther("0.0009") }))
         .to.be.revertedWith("not enough eth.")
@@ -235,7 +235,7 @@ describe("Merkletree", function () {
       const { sampleNFT, sampleERC721MultiSaleByMerkle, owner, authorized, unauthorized, others } = await loadFixture(deployFixture)
 
       const tree1 = createTree([{ address: authorized.address, allowedAmount: 10 }])
-      await expect(sampleERC721MultiSaleByMerkle.connect(owner)["setCurrentSale((uint8,uint8,uint256,uint256),bytes32)"](
+      await expect(sampleERC721MultiSaleByMerkle.connect(owner)["setCurrentSale((uint8,uint248,uint248,uint8),bytes32)"](
         {
           id: 1,
           saleType: 0,
@@ -243,7 +243,7 @@ describe("Merkletree", function () {
           maxSupply: 10
         }, tree1.getHexRoot())).not.to.reverted
 
-      const proof1 = tree1.getHexProof(ethers.utils.solidityKeccak256(['address', 'uint256'], [authorized.address, 10]))
+      const proof1 = tree1.getHexProof(ethers.utils.solidityKeccak256(['address', 'uint248'], [authorized.address, 10]))
 
       await expect(sampleERC721MultiSaleByMerkle.connect(authorized).claim(10, 10, proof1, { value: ethers.utils.parseEther("0.01") }))
         .not.to.be.reverted
@@ -251,7 +251,7 @@ describe("Merkletree", function () {
 
       const tree2 = createTree([{ address: authorized.address, allowedAmount: 5 }])
 
-      await expect(sampleERC721MultiSaleByMerkle.connect(owner)["setCurrentSale((uint8,uint8,uint256,uint256),bytes32)"](
+      await expect(sampleERC721MultiSaleByMerkle.connect(owner)["setCurrentSale((uint8,uint248,uint248,uint8),bytes32)"](
         {
           id: 2,
           saleType: 1,
@@ -259,7 +259,7 @@ describe("Merkletree", function () {
           maxSupply: 10
         }, tree2.getHexRoot())).not.to.reverted
 
-      const proof2 = tree2.getHexProof(ethers.utils.solidityKeccak256(['address', 'uint256'], [authorized.address, 5]))
+      const proof2 = tree2.getHexProof(ethers.utils.solidityKeccak256(['address', 'uint248'], [authorized.address, 5]))
 
       await expect(sampleERC721MultiSaleByMerkle.connect(authorized).exchange([0, 1, 2, 3, 4], 5, proof2, { value: ethers.utils.parseEther("0.005") }))
         .not.to.be.reverted
@@ -271,7 +271,7 @@ describe("Merkletree", function () {
       const { sampleNFT, sampleERC721MultiSaleByMerkle, owner, authorized, unauthorized, others } = await loadFixture(deployFixture)
 
       const tree = createTree([{ address: authorized.address, allowedAmount: 10 }])
-      await expect(sampleERC721MultiSaleByMerkle.connect(owner)["setCurrentSale((uint8,uint8,uint256,uint256),bytes32)"](
+      await expect(sampleERC721MultiSaleByMerkle.connect(owner)["setCurrentSale((uint8,uint248,uint248,uint8),bytes32)"](
         {
           id: 1,
           saleType: 0,
@@ -279,12 +279,12 @@ describe("Merkletree", function () {
           maxSupply: 10
         }, tree.getHexRoot())).not.to.reverted
 
-      const proof = tree.getHexProof(ethers.utils.solidityKeccak256(['address', 'uint256'], [authorized.address, 10]))
+      const proof = tree.getHexProof(ethers.utils.solidityKeccak256(['address', 'uint248'], [authorized.address, 10]))
 
       await expect(sampleERC721MultiSaleByMerkle.connect(authorized).claim(10, 10, proof, { value: ethers.utils.parseEther("0.01") }))
         .not.to.be.reverted
 
-      await expect(sampleERC721MultiSaleByMerkle.connect(owner)["setCurrentSale((uint8,uint8,uint256,uint256),bytes32)"](
+      await expect(sampleERC721MultiSaleByMerkle.connect(owner)["setCurrentSale((uint8,uint248,uint248,uint8),bytes32)"](
         {
           id: 2,
           saleType: 1,
@@ -304,7 +304,7 @@ describe("Merkletree", function () {
       const { sampleNFT, sampleERC721MultiSaleByMerkle, owner, authorized, unauthorized, others } = await loadFixture(deployFixture)
 
       const tree = createTree([{ address: authorized.address, allowedAmount: 10 }])
-      await expect(sampleERC721MultiSaleByMerkle.connect(owner)["setCurrentSale((uint8,uint8,uint256,uint256),bytes32)"](
+      await expect(sampleERC721MultiSaleByMerkle.connect(owner)["setCurrentSale((uint8,uint248,uint248,uint8),bytes32)"](
         {
           id: 1,
           saleType: 0,
@@ -312,7 +312,7 @@ describe("Merkletree", function () {
           maxSupply: 10
         }, tree.getHexRoot())).not.to.reverted
 
-      const proof = tree.getHexProof(ethers.utils.solidityKeccak256(['address', 'uint256'], [authorized.address, 10]))
+      const proof = tree.getHexProof(ethers.utils.solidityKeccak256(['address', 'uint248'], [authorized.address, 10]))
 
       await expect(sampleERC721MultiSaleByMerkle.connect(authorized).claim(5, 10, proof, { value: ethers.utils.parseEther("0.01") }))
         .not.to.be.reverted
@@ -326,7 +326,7 @@ describe("Merkletree", function () {
       const { sampleNFT, sampleERC721MultiSaleByMerkle, owner, authorized, unauthorized, others } = await loadFixture(deployFixture)
 
       const tree = createTree([{ address: authorized.address, allowedAmount: 10 }])
-      await expect(sampleERC721MultiSaleByMerkle.connect(owner)["setCurrentSale((uint8,uint8,uint256,uint256),bytes32)"](
+      await expect(sampleERC721MultiSaleByMerkle.connect(owner)["setCurrentSale((uint8,uint248,uint248,uint8),bytes32)"](
         {
           id: 1,
           saleType: 0,
@@ -334,12 +334,12 @@ describe("Merkletree", function () {
           maxSupply: 10
         }, tree.getHexRoot())).not.to.reverted
 
-      const proof = tree.getHexProof(ethers.utils.solidityKeccak256(['address', 'uint256'], [authorized.address, 10]))
+      const proof = tree.getHexProof(ethers.utils.solidityKeccak256(['address', 'uint248'], [authorized.address, 10]))
 
       await expect(sampleERC721MultiSaleByMerkle.connect(authorized).claim(5, 10, proof, { value: ethers.utils.parseEther("0.01") }))
         .not.to.be.reverted
 
-      await expect(sampleERC721MultiSaleByMerkle.connect(owner)["setCurrentSale((uint8,uint8,uint256,uint256),bytes32)"](
+      await expect(sampleERC721MultiSaleByMerkle.connect(owner)["setCurrentSale((uint8,uint248,uint248,uint8),bytes32)"](
         {
           id: 2,
           saleType: 0,

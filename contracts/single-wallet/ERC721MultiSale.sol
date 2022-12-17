@@ -14,7 +14,7 @@ abstract contract ERC721MultiSale is IERC721MultiSale, BasicSale {
     // ==================================================================
     // Modifier
     // ==================================================================
-    modifier isNotOverAllowedAmount(uint256 amount, uint256 allowedAmount) {
+    modifier isNotOverAllowedAmount(uint248 amount, uint248 allowedAmount) {
         require(
             getBuyCount() + amount <= allowedAmount,
             "claim is over allowed amount."
@@ -41,7 +41,7 @@ abstract contract ERC721MultiSale is IERC721MultiSale, BasicSale {
     // ------------------------------------------------------------------
     // internal & private
     // ------------------------------------------------------------------
-    function _claim(uint256 amount, uint256 allowedAmount)
+    function _claim(uint248 amount, uint248 allowedAmount)
         internal
         virtual
         whenNotPaused
@@ -53,18 +53,18 @@ abstract contract ERC721MultiSale is IERC721MultiSale, BasicSale {
         _record(amount);
     }
 
-    function _exchange(uint256[] calldata burnTokenIds, uint256 allowedAmount)
+    function _exchange(uint256[] calldata burnTokenIds, uint248 allowedAmount)
         internal
         virtual
         whenNotPaused
         isNotOverMaxSaleSupply(burnTokenIds.length)
-        isNotOverAllowedAmount(burnTokenIds.length, allowedAmount)
+        isNotOverAllowedAmount(uint248(burnTokenIds.length), allowedAmount)
         whenExcahngeSale
     {
-        _record(burnTokenIds.length);
+        _record(uint248(burnTokenIds.length));
     }
 
-    function _record(uint256 amount) private {
+    function _record(uint248 amount) private {
         SalesRecord storage record = _salesRecordByBuyer[msg.sender];
 
         if (record.id == _currentSale.id) {

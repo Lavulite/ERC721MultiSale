@@ -8,7 +8,7 @@ const sign = async (saleId: number, address: string, allowedAmount: number, sign
         [
           "uint8",
           "address",
-          "uint256"
+          "uint248"
         ],
         [
           saleId,

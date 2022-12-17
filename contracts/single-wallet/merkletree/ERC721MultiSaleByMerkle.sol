@@ -15,8 +15,8 @@ abstract contract ERC721MultiSaleByMerkle is
     // Modifier
     // ==================================================================
     modifier hasRight(
-        uint256 amount,
-        uint256 allowedAmount,
+        uint248 amount,
+        uint248 allowedAmount,
         bytes32[] calldata merkleProof
     ) {
         bytes32 node = keccak256(abi.encodePacked(msg.sender, allowedAmount));
@@ -31,8 +31,8 @@ abstract contract ERC721MultiSaleByMerkle is
     // Function
     // ==================================================================
     function _claim(
-        uint256 amount,
-        uint256 allowedAmount,
+        uint248 amount,
+        uint248 allowedAmount,
         bytes32[] calldata merkleProof
     ) internal virtual hasRight(amount, allowedAmount, merkleProof) {
         _claim(amount, allowedAmount);
@@ -40,12 +40,12 @@ abstract contract ERC721MultiSaleByMerkle is
 
     function _exchange(
         uint256[] calldata burnTokenIds,
-        uint256 allowedAmount,
+        uint248 allowedAmount,
         bytes32[] calldata merkleProof
     )
         internal
         virtual
-        hasRight(burnTokenIds.length, allowedAmount, merkleProof)
+        hasRight(uint248(burnTokenIds.length), allowedAmount, merkleProof)
     {
         _exchange(burnTokenIds, allowedAmount);
     }

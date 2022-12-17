@@ -16,7 +16,8 @@ interface IBasicSale {
 
     function setCurrentSale(Sale calldata sale) external;
 
-    function withdraw() external;
+    // payable for testability
+    function withdraw() external payable;
 
     function setWithdrawAddress(address payable value) external;
 
